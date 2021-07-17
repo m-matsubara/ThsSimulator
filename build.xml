@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="ThsSimulator" default="build" basedir=".">
+
+  <!-- このビルドのためにグローバルプロパティを設定します -->
+  <property name="project" value="ThsSimulator" />
+  <property name="src"     value="src"          />
+  <property name="build"   value="ant/build"    />
+  <property name="dist"    value="ant/dist"     />
+  <property name="doc"    value="doc"     />
+
+  <target name="prepare">
+    <!-- タイムスタンプを作成します -->
+    <tstamp/>
+    <!-- コンパイルで使用するビルドディレクトリを作成します -->
+    <mkdir dir="${build}" />
+    <!-- 出力ディレクトリを作成します -->
+    <mkdir dir="${dist}" />
+    <!-- ドキュメントディレクトリを作成します -->
+    <mkdir dir="${doc}" />
+  </target>
+
+  <target name="make_doc" depends="prepare">
+    <delete>
+      <fileset dir="${doc}" includes="**/*" />
+    </delete>
+    <javadoc packagenames="matsubara.*"
+           sourcepath="${src}"
+           destdir="${doc}"
+           author="true"
+           version="true"
+           use="true"
+           Protected="true"
+           windowtitle="プリウス・ドライビング・シミュレータ デベロッパーズガイド"
+           doctitle="プリウス・ドライビング・シミュレータ デベロッパーズガイド"
+           bottom="Copyright (c) 2002 m.matsubara All Rights Reserved.">
+    </javadoc>
+  </target>
+
+
+  <target name="compile" depends="prepare" >
+    <!-- ${src}から${build}に、Javaコードをコンパイルします -->
+    <javac srcdir="${src}" destdir="${build}" target="1.1" source="1.2" debug="off" optimize="on" encoding="UTF-8"/>
+  </target>
+
+  <target name="resorce_copy">
+    <!-- リソース（画像,音声など）をコピー -->
+    <copy todir="${build}">
+      <fileset dir="${src}">
+        <include name="**/*.gif" />
+        <include name="**/*.jpeg" />
+        <include name="**/*.png" />
+        <include name="**/*.au" />
+        <include name="**/*.properties" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="srcpack_backup">
+    <!-- ソースファイルを zip にして保存 -->
+    <zip zipfile="${dist}/${project}-src-${DSTAMP}.zip"
+        basedir="."
+        includes="${src}/**, *.html, *.bat, *.sh, build.xml, ${project}.jpx, ${project}.jpx/local"
+    />
+  </target>
+
+  <target name="build" depends="compile,resorce_copy,srcpack_backup">
+    <!-- ${build}の中のすべてのファイルをMyProject-${DSTAMP}.jarファイルに格納します -->
+    <!-- jar jarfile="${dist}/${project}-${DSTAMP}.jar" basedir="${build}" 
+      manifest="${src}\META-INF\MANIFEST.MF" / -->
+    <jar jarfile="${project}.jar" basedir="${build}" 
+      manifest="${src}\META-INF\MANIFEST.MF" />
+    <copy file="${project}.jar" tofile="${dist}/${project}-${DSTAMP}.jar" />
+  </target>
+
+  <target name="clean">
+    <!-- ${build}と${dist}ディレクトリツリーを削除します -->
+    <delete dir="${build}" />
+    <delete dir="${dist}" />
+  </target>
+</project>
+  

@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <title>Prius driving simulator</title>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+    <script>
+<!--
+function GetParam(sUrl, sIdentifer, sDefault)
+{
+  sSpritUrl=sUrl.split("?");
+  for (nIdx=1; nIdx < sSpritUrl.length; nIdx++) {
+    sElement = sSpritUrl[nIdx];
+    if (sElement.substring(0, sIdentifer.length+1).toUpperCase() == sIdentifer.toUpperCase()+"=") {
+      return sElement.substring(sIdentifer.length+1, sElement.length);
+    }
+  }
+  return sDefault;
+}
+//-->
+    </script>
+  </head>
+  <body>
+    <form name="frmMain">
+    <h2>Prius driving simulator version 1.4.0 (Internatinal edition) preview release</h2>
+    Language&Country : 
+    <select name="cmbLanguage" onChange="self.location.href = self.location.pathname + document.frmMain.cmbLanguage.value;">
+      <option value="">Auto detect
+      <option value="?Language=ja?Country=JP">Japanese-japan (km/liter)
+      <option value="?Language=en?Country=US">English-US (mile/gallon)
+      <option value="?Language=en">English-GB (mile/gallon)
+    </select>
+    <script>
+      if (self.location.search != "")
+        document.frmMain.cmbLanguage.value = self.location.search;
+      else
+        document.frmMain.cmbLanguage.selectedIndex = 0;
+    </script>    
+    <br>
+    <br>
+<script>
+  var sLanguage;
+  var sCountry;
+  sLanguage = GetParam(document.location.href, "Language", "");
+  sCountry = GetParam(document.location.href, "Country", "");
+  document.writeln("<applet");
+  document.writeln("  codebase = \".\"");
+  document.writeln("  archive  = \"./ThsSimulator.jar\"");
+  document.writeln("  code     = \"matsubara.thssimulator.ThsApplet.class\"");
+  document.writeln("  name     = \"TestApplet\"");
+  document.writeln("  width    = 600 height   = 380");
+  document.writeln("  hspace   = 0   vspace   = 0");
+  document.writeln("  align    = middle");
+  document.writeln(">");
+  if (sLanguage != "")
+    document.write("<Param name=\"Language\" value=\"" + sLanguage + "\">");
+  if (sCountry != "")
+    document.write("<Param name=\"Country\" value=\"" + sCountry + "\">");
+  document.writeln("</APPLET>");
+</script>
+    </form>
+  </body>
+</html>
